@@ -53,7 +53,7 @@ export default function App() {
     setNewAddedTasks((newAddedTasks)=>{
       return newAddedTasks.filter((task)=> task.id !== id)
     });
-    // console.log('one list item deleted');
+    
   }
 
   return (
