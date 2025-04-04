@@ -1,4 +1,5 @@
 import { Pressable, StyleSheet, Text, Switch, View, Alert } from "react-native";
+import Icon from 'react-native-vector-icons/FontAwesome'; 
 
 function TaskItemList(props) {
   // Toggle handler
@@ -29,10 +30,11 @@ const handleDelete = () => {
   return (
     <Pressable
       // onLongPress={() => props.onDeleteTask(props.id)} // Delete on long press
-      onLongPress={handleDelete}
+      // onLongPress={handleDelete}
       // onPress={() => props.onToggleCompletion(props.id)} // Toggle completion on press- list toggle
     >
       <View style={styles.toggleList}>
+      <Icon name="trash" size={30} color="red" onPress={handleDelete}/>
         <Text
           style={[
             styles.taskContainerListItem,

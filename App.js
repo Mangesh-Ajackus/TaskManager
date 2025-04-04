@@ -1,18 +1,54 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   FlatList,
   StyleSheet,
   Text,
   View,
+  Animated,
 } from "react-native";
 import { Toast } from "react-native-toast-message/lib/src/Toast";
 import TaskItemList from "./components/TaskItemList";
 import TaskInput from "./components/TaskInput";
+import Icon from 'react-native-vector-icons/MaterialIcons'; 
 
 export default function App() {
   
   const [newAddedTasks, setNewAddedTasks] = useState([]);
+  const [fadeAnim] = useState(new Animated.Value(0)); // Initial opacity is 0
+  const [scaleAnim] = useState(new Animated.Value(0.5)); // Initial scale is 0.5
+
+  useEffect(() => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.parallel([
+          Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 2000,
+            useNativeDriver: true,
+          }),
+          Animated.timing(scaleAnim, {
+            toValue: 1,
+            duration: 2000,
+            useNativeDriver: true,
+          }),
+        ]),
+        Animated.parallel([
+          Animated.timing(fadeAnim, {
+            toValue: 0,
+            duration: 2000,
+            useNativeDriver: true,
+          }),
+          Animated.timing(scaleAnim, {
+            toValue: 0.5,
+            duration: 2000,
+            useNativeDriver: true,
+          }),
+        ]),
+      ])
+    ).start();
+  }, []);
   
+
   //  when button clicked
   function addTaskHandler(enteredTaskText) {
     // Only add the task if the entered value is not empty
@@ -61,7 +97,16 @@ export default function App() {
       <View style={styles.appContainer}>
 
         <View>
-          <Text style={styles.appHeading}>Task Manager App</Text>
+          {/* <Text style={styles.appHeading}>Task Manager App</Text> */}
+          <Animated.Text
+              style={[
+                styles.appHeading,
+                { opacity: fadeAnim, transform: [{ scale: scaleAnim }] },
+              ]}
+            >
+              Task Manager App
+          </Animated.Text>
+
         </View>
 
         <TaskInput onAddTask = {addTaskHandler}/>
@@ -70,6 +115,7 @@ export default function App() {
 
           {newAddedTasks.length > 0 && (
             <Text style={styles.taskContainerHeading}> List of all tasks </Text>
+            
           )}
 
           {/* small list we can use <ScrollView> */}
@@ -117,23 +163,27 @@ export default function App() {
 const styles = StyleSheet.create({
   appHeading: {
     fontSize: 32,
-    color: "purple",
-    borderBottomWidth: 1,
-    borderBlockColor: "red",
-    marginBottom: 50,
+    color: "#27a9e1",
+    // borderWidth: 1,
+    // borderBlockColor: "#fff",
+    marginBottom: 0,
+    fontWeight: 700,
   },
   appContainer: {
     flex: 1,
-    paddingTop: 100,
-    paddingHorizontal: 20,
-    justifyContent: "center",
-    alignItems: "center",    
+    paddingTop: 70,
+    paddingHorizontal: 10,
+    justifyContent: "top",
+    alignItems: "center", 
+    backgroundColor: '#000'   
   },
   taskContainer: {
-    flex: 6,
+    // flex: 2,
     width: "100%",
     marginTop: 40,
     borderRadius: 12,
+    maxHeight: '40%',
+    // borderWidth: 2
   },
   taskContainerHeading: {
     fontSize: 24,
