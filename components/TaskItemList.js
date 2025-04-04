@@ -27,6 +27,7 @@ const handleDelete = () => {
 };
 
   return (
+    
     <Pressable
       // onLongPress={() => props.onDeleteTask(props.id)} // Delete on long press
       onLongPress={handleDelete}

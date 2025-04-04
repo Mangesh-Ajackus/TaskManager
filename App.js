@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {
+  Button,
   FlatList,
   StyleSheet,
   Text,
@@ -12,31 +13,42 @@ import TaskInput from "./components/TaskInput";
 export default function App() {
   
   const [newAddedTasks, setNewAddedTasks] = useState([]);
+  const [modalIsVisible, setModalISVisible] = useState(false)
   
+  // To open modal
+  function startAddTaskHandler(){
+    setModalISVisible(true);
+  }
+
+  // To close modal
+  function endAddTaskHandler(){
+    setModalISVisible(false);
+  }
+
   //  when button clicked
   function addTaskHandler(enteredTaskText) {
     // Only add the task if the entered value is not empty
-    if ((enteredTaskText.trim() !== "") && (enteredTaskText.length >= 3)) {
+    if (enteredTaskText.trim() === "" || enteredTaskText.length < 3) {
+      // Show error toast if the task is empty or too short
+      Toast.show({
+        type: "error",
+        position: "top",
+        text1: "Empty Task!",
+        text2: "Please enter a task with at least 3 characters.",
+      });
+    } else {
       setNewAddedTasks((newAddedTasks) => [
         ...newAddedTasks,
         { text: enteredTaskText, id: Math.random().toString(), completed: false },
       ]);
-  
-      // Show a success toast
-      Toast.show({
-        type: 'success',
-        position: 'top',
-        text1: 'Task Added!',
-        text2: 'Your task was successfully added to the list.',
-      });
+      endAddTaskHandler();
 
-    } else {
-      // Optionally, you can alert the user that the task cannot be empty
+      // Show success toast if task is added
       Toast.show({
-        type: 'error',
-        position: 'top',
-        text1: 'Empty Task!',
-        text2: 'Please enter a task with at least 3 characters.',
+        type: "success",
+        position: "top",
+        text1: "Task Added!",
+        text2: "Your task was successfully added to the list.",
       });
     }
   }
@@ -64,10 +76,21 @@ export default function App() {
           <Text style={styles.appHeading}>Task Manager App</Text>
         </View>
 
-        <TaskInput onAddTask = {addTaskHandler}/>
+        <Button 
+          title="ADD NEW TASK" 
+          color="purple"
+          onPress={startAddTaskHandler}
+          >
+        </Button>
+
+        <TaskInput 
+        visible={modalIsVisible} 
+        onAddTask = {addTaskHandler}
+        onCancel = {endAddTaskHandler}
+        />
 
         <View style={styles.taskContainer}>
-          <Text style={styles.taskContainerHeading}> List of all tasks </Text>
+          
 
           {/* small list we can use <ScrollView> */}
           {/* <ScrollView alwaysBounceVertical= {true}>
@@ -83,11 +106,14 @@ export default function App() {
           </ScrollView> */}
           
           {/* long list we must use <FlatList> - it rendered only required data */}
+          {newAddedTasks.length > 0 && (
+            <Text style={styles.taskContainerHeading}> List of all tasks : </Text>
+          )}
+
           <FlatList
             data={newAddedTasks}
             //itemData is the temporay variable, we can write anything x,y,z
             renderItem={(itemData) => {
-              
               return <TaskItemList 
               text= {itemData.item.text}
               id = {itemData.item.id}
@@ -121,7 +147,7 @@ const styles = StyleSheet.create({
   },
   appContainer: {
     flex: 1,
-    paddingTop: 100,
+    paddingTop: "20%",
     paddingHorizontal: 20,
     justifyContent: "center",
     alignItems: "center",
@@ -134,6 +160,11 @@ const styles = StyleSheet.create({
   taskContainerHeading: {
     fontSize: 24,
     marginBottom: 20,
+    marginTop: 20,
+    backgroundColor: 'coral',
+    padding: 8,
+    textAlign: 'center',
+    borderRadius: 8,
   },
   
 });
