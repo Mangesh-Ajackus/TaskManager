@@ -16,14 +16,16 @@ function TaskInput (props){
     }
 
     return  (
-        <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Add a new task"
-          onChangeText={taskInputHandler}
-          value={enteredTaskText} // Binding the value here to update the input
-        />
-        <Button title="Add Task" onPress={addTaskHandler} />
+      <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.textInput}
+            placeholder="Add a new task"
+            onChangeText={taskInputHandler}
+            value={enteredTaskText} // Binding the value here to update the input
+          />
+          <View style={styles.addTaskButton}>
+            <Button title="Add Task" onPress={addTaskHandler} color='#fff'/>
+          </View>
       </View>
     );
 
@@ -33,18 +35,24 @@ export default TaskInput;
 const styles = StyleSheet.create({
     inputContainer: {
         flex: 1,
-        flexDirection: "row",
+        flexDirection: "column",
         justifyContent: "space-between",
         alignItems: "center",
-        marginBottom: 20,
-        borderBottomWidth: 1,
-        borderBottomColor: "blue",
+        width: "100%"
     },
       textInput: {
         borderWidth: 1,
         borderColor: "#ccc",
-        width: "70%",
-        marginRight: 10,
+        width: "100%",
         padding: 20,
+        fontSize: 16
     },
+    addTaskButton:{
+      backgroundColor: 'skyblue',
+      marginVertical: 10,
+      color: '#fff',
+      borderRadius: 6,
+      padding: 4,
+      paddingHorizontal: 20
+    }
 })

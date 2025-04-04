@@ -67,7 +67,10 @@ export default function App() {
         <TaskInput onAddTask = {addTaskHandler}/>
 
         <View style={styles.taskContainer}>
-          <Text style={styles.taskContainerHeading}> List of all tasks </Text>
+
+          {newAddedTasks.length > 0 && (
+            <Text style={styles.taskContainerHeading}> List of all tasks </Text>
+          )}
 
           {/* small list we can use <ScrollView> */}
           {/* <ScrollView alwaysBounceVertical= {true}>
@@ -124,16 +127,20 @@ const styles = StyleSheet.create({
     paddingTop: 100,
     paddingHorizontal: 20,
     justifyContent: "center",
-    alignItems: "center",
-    
+    alignItems: "center",    
   },
   taskContainer: {
     flex: 6,
     width: "100%",
+    marginTop: 40,
+    borderRadius: 12,
   },
   taskContainerHeading: {
     fontSize: 24,
     marginBottom: 20,
+    padding: 10,
+    textAlign: "center",
+    backgroundColor:'coral',
+    borderRadius: 12
   },
-  
 });
