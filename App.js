@@ -9,8 +9,7 @@ import {
 import { Toast } from "react-native-toast-message/lib/src/Toast";
 import TaskItemList from "./components/TaskItemList";
 import TaskInput from "./components/TaskInput";
-import Icon from 'react-native-vector-icons/MaterialIcons'; 
-
+import { StatusBar } from "expo-status-bar";
 export default function App() {
   
   const [newAddedTasks, setNewAddedTasks] = useState([]);
@@ -93,7 +92,9 @@ export default function App() {
   }
 
   return (
-    //  main container of app
+    <>
+    <StatusBar style="light"/>
+    {/* main container of app */}
       <View style={styles.appContainer}>
 
         <View>
@@ -115,7 +116,6 @@ export default function App() {
 
           {newAddedTasks.length > 0 && (
             <Text style={styles.taskContainerHeading}> List of all tasks </Text>
-            
           )}
 
           {/* small list we can use <ScrollView> */}
@@ -157,6 +157,7 @@ export default function App() {
         <Toast />
 
       </View>
+      </>
   );
 }
 
@@ -168,6 +169,12 @@ const styles = StyleSheet.create({
     // borderBlockColor: "#fff",
     marginBottom: 0,
     fontWeight: 700,
+    shadowColor: 'red', // Shadow color
+    shadowOffset: { width: 0, height: 4 }, // Shadow position (horizontal, vertical)
+    shadowOpacity: 0.5, // Shadow opacity
+    shadowRadius: 3, // Shadow blur
+    // Android Shadow Properties
+    elevation: 5, // Android shadow depth
   },
   appContainer: {
     flex: 1,
@@ -175,7 +182,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     justifyContent: "top",
     alignItems: "center", 
-    backgroundColor: '#000'   
+    // backgroundColor: '#000'   
   },
   taskContainer: {
     // flex: 2,

@@ -17,7 +17,10 @@ function TaskInput (props){
 
     return  (
       <View style={styles.inputContainer}>
-        <Image style={styles.topImage} source={require('../assets/images/goal.png')} />
+        <Image 
+          style={styles.topImage} 
+          source={require('../assets/images/goal.png')} 
+        />
           <TextInput
             style={styles.textInput}
             placeholder="Add a new task"
@@ -52,14 +55,8 @@ const styles = StyleSheet.create({
         width: "100%",
         padding: 20,
         fontSize: 16,
-        backgroundColor: 'white',
+        backgroundColor: '#d9d9d9',
         borderRadius: 8,
-        shadowColor: '#000', // Shadow color
-        shadowOffset: { width: 0, height: 4 }, // Shadow position (horizontal, vertical)
-        shadowOpacity: 0.1, // Shadow opacity
-        shadowRadius: 5, // Shadow blur
-        // Android Shadow Properties
-        elevation: 5, // Android shadow depth
     },
     addTaskButton:{
       backgroundColor: '#27a9e1',
