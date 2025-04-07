@@ -1,22 +1,25 @@
 import { useState } from "react";
-import { StyleSheet, TextInput, View, Button } from "react-native";
-import { Toast } from "react-native-toast-message/lib/src/Toast";
+import { StyleSheet, TextInput, View, Button, Image } from "react-native";
 
-function TaskInput (props){
+const TaskInput = (props) => {
     const [enteredTaskText, setEnteredTaskText] = useState("");
 
     //  To get input value
-    function taskInputHandler(enteredValue) {
+    const taskInputHandler = (enteredValue) => {
         setEnteredTaskText(enteredValue);
     }
 
-    function addTaskHandler(){
+    const addTaskHandler = () => {
         props.onAddTask(enteredTaskText);
         setEnteredTaskText(""); // Clear the input field by resetting the enteredTaskText state
     }
 
     return  (
       <View style={styles.inputContainer}>
+        <Image 
+          style={styles.topImage} 
+          source={require('../assets/images/goal.png')} 
+        />
           <TextInput
             style={styles.textInput}
             placeholder="Add a new task"
@@ -33,26 +36,31 @@ function TaskInput (props){
 export default TaskInput;
 
 const styles = StyleSheet.create({
+    topImage:{
+      width: 100,
+      height: 100,
+    },
     inputContainer: {
-        flex: 1,
         flexDirection: "column",
         justifyContent: "space-between",
         alignItems: "center",
-        width: "100%"
+        width: "100%",
     },
-      textInput: {
+    textInput: {
         borderWidth: 1,
         borderColor: "#ccc",
         width: "100%",
         padding: 20,
-        fontSize: 16
+        fontSize: 16,
+        backgroundColor: '#d9d9d9',
+        borderRadius: 8,
     },
     addTaskButton:{
-      backgroundColor: 'skyblue',
+      backgroundColor: '#27a9e1',
       marginVertical: 10,
       color: '#fff',
       borderRadius: 6,
       padding: 4,
       paddingHorizontal: 20
-    }
+    },
 })
