@@ -1,37 +1,48 @@
 import { Pressable, StyleSheet, Text, Switch, View, Alert } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome'; 
+import { useNavigation } from '@react-navigation/native';
 
-function TaskItemList(props) {
+const TaskItemList = (props) => {
   // Toggle handler
   const toggleSwitch = () => {
     props.onToggleCompletion(props.id); // Toggle completion on task
   };
 
-// Delete handler with confirmation
-const handleDelete = () => {
-  Alert.alert(
-    "Delete Task", // Title of the popup
-    "Are you sure you want to delete this task?", // Message
-    [
-      {
-        text: "Cancel", // Cancel button
-        style: "cancel",
+  // Delete task from list with confirmation pop-up
+  const handleDelete = () => {
+    Alert.alert(
+      "Delete Task", // Title of the popup
+      "Are you sure you want to delete this task?", // Message
+      [
+        {
+          text: "Cancel", // Cancel button
+          style: "cancel",
+        },
+        {
+          text: "Delete", // Delete button
+          style: "destructive",
+          onPress: () => props.onDeleteTask(props.id), // Delete task
+        },
+      ],
+      { cancelable: true }
+    );
+  };
+
+  const navigation = useNavigation();
+
+  const detailedTask = () => {
+    navigation.navigate('Tasks', {
+      taskDetails: {
+        text: props.text,
+        completed: props.completed,
+        createdAt: props.createdAt,
       },
-      {
-        text: "Delete", // Delete button
-        style: "destructive",
-        onPress: () => props.onDeleteTask(props.id), // Delete task
-      },
-    ],
-    { cancelable: true }
-  );
-};
+    });
+  };
 
   return (
     <Pressable
-      // onLongPress={() => props.onDeleteTask(props.id)} // Delete on long press
-      // onLongPress={handleDelete}
-      // onPress={() => props.onToggleCompletion(props.id)} // Toggle completion on press- list toggle
+      onPress={detailedTask}
     >
       <View style={styles.toggleList}>
       <Icon name="trash" size={30} color="red" onPress={handleDelete}/>

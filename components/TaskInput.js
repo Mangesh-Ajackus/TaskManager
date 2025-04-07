@@ -1,16 +1,15 @@
 import { useState } from "react";
-import { StyleSheet, TextInput, View, Button, Image, Animated } from "react-native";
+import { StyleSheet, TextInput, View, Button, Image } from "react-native";
 
-function TaskInput (props){
+const TaskInput = (props) => {
     const [enteredTaskText, setEnteredTaskText] = useState("");
-    const [fadeAnim] = useState(new Animated.Value(0)); // Initial opacity is 0
 
     //  To get input value
-    function taskInputHandler(enteredValue) {
+    const taskInputHandler = (enteredValue) => {
         setEnteredTaskText(enteredValue);
     }
 
-    function addTaskHandler(){
+    const addTaskHandler = () => {
         props.onAddTask(enteredTaskText);
         setEnteredTaskText(""); // Clear the input field by resetting the enteredTaskText state
     }
@@ -40,10 +39,8 @@ const styles = StyleSheet.create({
     topImage:{
       width: 100,
       height: 100,
-      // margin: 20
     },
     inputContainer: {
-        // flex: 2,
         flexDirection: "column",
         justifyContent: "space-between",
         alignItems: "center",
