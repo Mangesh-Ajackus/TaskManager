@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
 
-const CompletedTaskScreen = ({ route }) => {
+const DetailedTaskScreen = ({ route }) => {
   // Get the task details passed from HomeScreen
   const { taskDetails } = route.params;
 
@@ -39,4 +39,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CompletedTaskScreen;
+export default DetailedTaskScreen;
