@@ -126,7 +126,7 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   appHeading: {
     fontSize: 32,
-    color: "#f5d105",
+    color: "#5B21B6",
     marginBottom: 0,
     fontWeight: "700",
     shadowColor: "red",
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     justifyContent: "top",
     alignItems: "center",
-    backgroundColor: "#aaacf2"
+    backgroundColor: "#d5d6f9"
   },
   taskContainer: {
     width: "100%",
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     padding: 10,
     textAlign: "center",
-    backgroundColor: "coral",
+    backgroundColor: "#FB923C",
     borderRadius: 12,
   },
 });

@@ -18,7 +18,7 @@ const TaskInput = (props) => {
       <View style={styles.inputContainer}>
         <Image 
           style={styles.topImage} 
-          source={require('../assets/images/goal.png')} 
+          source={require('../assets/images/TMA.png')} 
         />
           <TextInput
             style={styles.textInput}
@@ -37,8 +37,9 @@ export default TaskInput;
 
 const styles = StyleSheet.create({
     topImage:{
-      width: 100,
-      height: 100,
+      width: 120,
+      height: 120,
+      margin: 8
     },
     inputContainer: {
         flexDirection: "column",
@@ -52,15 +53,15 @@ const styles = StyleSheet.create({
         width: "100%",
         padding: 20,
         fontSize: 16,
-        backgroundColor: '#d9d9d9',
+        backgroundColor: '#E5E7EB',
         borderRadius: 8,
     },
     addTaskButton:{
-      backgroundColor: '#27a9e1',
+      backgroundColor: '#0EA5E9',
       marginVertical: 10,
       color: '#fff',
       borderRadius: 6,
       padding: 4,
-      paddingHorizontal: 20
+      paddingHorizontal: 20,
     },
 })

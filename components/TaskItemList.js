@@ -45,7 +45,7 @@ const TaskItemList = (props) => {
       onPress={detailedTask}
     >
       <View style={styles.toggleList}>
-      <Icon name="trash" size={30} color="red" onPress={handleDelete}/>
+      <Icon name="trash" size={30} color="#EF4444" onPress={handleDelete}/>
         <Text
           style={[
             styles.taskContainerListItem,
@@ -58,8 +58,8 @@ const TaskItemList = (props) => {
         <Switch
           value={props.completed}
           onValueChange={toggleSwitch}
-          trackColor={{ true: "#81b0ff", false: "#767577" }}
-          thumbColor={props.completed ? "#f5dd4b" : "#f4f3f4"}
+          trackColor={{ true: "#D1D5DB", false: "#767577" }}
+          thumbColor={props.completed ? "#0EA5E9" : "#f4f3f4"}
         />
       </View>
     </Pressable>
@@ -85,9 +85,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between', 
     padding: 10,
     zIndex: 2,
-    backgroundColor: "#e7c8d9",
+    backgroundColor: "#C7A8F4",
     alignItems: 'center',
     borderRadius: 10,
-    marginBottom: 10,
+    marginBottom: 16,
+    shadowColor: "purple",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
+    elevation: 5,
   }
 });
