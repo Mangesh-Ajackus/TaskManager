@@ -1,8 +1,24 @@
-import { useState } from "react";
-import { StyleSheet, TextInput, View, Button, Image } from "react-native";
+import { useState, useRef } from "react";
+import { StyleSheet, TextInput, View, Button, Image, PanResponder, Animated } from "react-native";
 
 const TaskInput = (props) => {
     const [enteredTaskText, setEnteredTaskText] = useState("");
+    const pan = useRef(new Animated.ValueXY()).current;
+    const panResponder = useRef(
+      PanResponder.create({
+        onMoveShouldSetPanResponder: () => true,// make false to stop animation
+        onPanResponderMove: Animated.event(
+          [null, { dx: pan.x, dy: pan.y }],
+          { useNativeDriver: false } // Add this to specify options
+        ),
+        onPanResponderRelease: () => {
+          Animated.spring(pan, {
+            toValue: {x: 0, y: 0},
+            useNativeDriver: true,
+          }).start();
+        },
+      }),
+    ).current;
 
     //  To get input value
     const taskInputHandler = (enteredValue) => {
@@ -16,10 +32,16 @@ const TaskInput = (props) => {
 
     return  (
       <View style={styles.inputContainer}>
-        <Image 
-          style={styles.topImage} 
-          source={require('../assets/images/TMA.png')} 
-        />
+        <Animated.View
+          style={{
+            transform: [{translateX: pan.x}, {translateY: pan.y}],
+          }}
+          {...panResponder.panHandlers}>
+          <Image 
+            style={styles.topImage} 
+            source={require('../assets/images/TMA.png')} 
+          />
+        </Animated.View>
           <TextInput
             style={styles.textInput}
             placeholder="Add a new task"

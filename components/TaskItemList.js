@@ -41,28 +41,31 @@ const TaskItemList = (props) => {
   };
 
   return (
-    <Pressable
-      onPress={detailedTask}
-    >
-      <View style={styles.toggleList}>
-      <Icon name="trash" size={30} color="#EF4444" onPress={handleDelete}/>
-        <Text
-          style={[
-            styles.taskContainerListItem,
-            props.completed && styles.completedTaskText, // Apply strike-through if completed
-          ]}
-        >
-          {props.text}
-        </Text>
-        {/* Toggle switch for completion */}
-        <Switch
-          value={props.completed}
-          onValueChange={toggleSwitch}
-          trackColor={{ true: "#D1D5DB", false: "#767577" }}
-          thumbColor={props.completed ? "#0EA5E9" : "#f4f3f4"}
-        />
-      </View>
-    </Pressable>
+
+    <>    
+      <Pressable
+        onPress={detailedTask}
+      >
+        <View style={styles.toggleList}>
+        <Icon name="trash" size={30} color="#EF4444" onPress={handleDelete}/>
+          <Text
+            style={[
+              styles.taskContainerListItem,
+              props.completed && styles.completedTaskText, // Apply strike-through if completed
+            ]}
+          >
+            {props.text}
+          </Text>
+          {/* Toggle switch for completion */}
+          <Switch
+            value={props.completed}
+            onValueChange={toggleSwitch}
+            trackColor={{ true: "#D1D5DB", false: "#767577" }}
+            thumbColor={props.completed ? "#0EA5E9" : "#f4f3f4"}
+          />
+        </View>
+      </Pressable>
+    </>
     
   );
 }

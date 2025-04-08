@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet} from "react-native";
 
 const DetailedTaskScreen = ({ route }) => {
   // Get the task details passed from HomeScreen

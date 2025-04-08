@@ -1,53 +1,38 @@
 import { useState, useEffect } from "react";
-import { FlatList, StyleSheet, Text, View, Animated } from "react-native";
+import { FlatList, StyleSheet, Text, View, Animated,Button, } from "react-native";
 import { Toast } from "react-native-toast-message/lib/src/Toast";
-import TaskItemList from "../components/TaskItemList"; // Ensure this path is correct.
-import TaskInput from "../components/TaskInput"; // Ensure this path is correct.
+import TaskItemList from "../components/TaskItemList";
+import TaskInput from "../components/TaskInput";
 import { useNavigation } from '@react-navigation/native';
 
 const HomeScreen = () => {
   const [newAddedTasks, setNewAddedTasks] = useState([]);
-  const [fadeAnim] = useState(new Animated.Value(0)); // Initial opacity is 0
-  const [scaleAnim] = useState(new Animated.Value(0.5)); // Initial scale is 0.5
+  const [fadeAnim] = useState(new Animated.Value(0));
+  const [scaleAnim] = useState(new Animated.Value(0.5));
+  const [filter, setFilter] = useState("all"); // New state for filter
   const navigation = useNavigation();
 
   useEffect(() => {
     Animated.loop(
       Animated.sequence([
         Animated.parallel([
-          Animated.timing(fadeAnim, {
-            toValue: 1,
-            duration: 2000,
-            useNativeDriver: true,
-          }),
-          Animated.timing(scaleAnim, {
-            toValue: 1,
-            duration: 2000,
-            useNativeDriver: true,
-          }),
+          Animated.timing(fadeAnim, { toValue: 1, duration: 2000, useNativeDriver: true }),
+          Animated.timing(scaleAnim, { toValue: 1, duration: 2000, useNativeDriver: true }),
         ]),
         Animated.parallel([
-          Animated.timing(fadeAnim, {
-            toValue: 0,
-            duration: 2000,
-            useNativeDriver: true,
-          }),
-          Animated.timing(scaleAnim, {
-            toValue: 0.5,
-            duration: 2000,
-            useNativeDriver: true,
-          }),
+          Animated.timing(fadeAnim, { toValue: 0, duration: 2000, useNativeDriver: true }),
+          Animated.timing(scaleAnim, { toValue: 0.5, duration: 2000, useNativeDriver: true }),
         ]),
       ])
     ).start();
   }, []);
 
-  // Add a new task with Alert Message
   const addTaskHandler = (enteredTaskText) => {
     if (enteredTaskText.trim() !== "" && enteredTaskText.length >= 3) {
       setNewAddedTasks((prevTasks) => [
         ...prevTasks,
-        { text: enteredTaskText, 
+        { 
+          text: enteredTaskText, 
           id: Math.random().toString(), 
           completed: false, 
           createdAt: new Date().toLocaleString(), 
@@ -69,7 +54,6 @@ const HomeScreen = () => {
     }
   }
 
-  // Toggle task completion
   const toggleTaskCompletion = (id) => {
     setNewAddedTasks((prevTasks) =>
       prevTasks.map((task) =>
@@ -78,10 +62,20 @@ const HomeScreen = () => {
     );
   }
 
-  // Delete a task
   const deleteTaskHandler = (id) => {
     setNewAddedTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
   }
+
+  // Filter tasks based on the selected filter type
+  const filteredTasks = newAddedTasks.filter((task) => {
+    if (filter === "pending") {
+      return !task.completed;
+    }
+    if (filter === "completed") {
+      return task.completed;
+    }
+    return true; // Return all tasks when filter is 'all'
+  });
 
   return (
     <View style={styles.appContainer}>
@@ -96,13 +90,30 @@ const HomeScreen = () => {
 
       <TaskInput onAddTask={addTaskHandler} />
 
-      <View style={styles.taskContainer}>
-        {newAddedTasks.length > 0 && (
-          <Text style={styles.taskContainerHeading}>List of all tasks</Text>
-        )}
+      {newAddedTasks.length > 0 && (
+        <>
+          <Text style={styles.taskContainerHeading}>List of Tasks</Text>
+          <View style={styles.listButton}>
+            <View style={[styles.filterTasksButton, filter === "all" && styles.viewAllTasksButton,]}>
+              <Button title="View All" color='#fff' onPress={() => setFilter("all")} />
+            </View>
 
+            <View style={
+              [styles.filterTasksButton, filter === "pending" && styles.pendingTasksButton, ]}>
+              <Button title="Pending" color='#fff' onPress={() => setFilter("pending")} />
+            </View>
+
+            <View style={[styles.filterTasksButton, filter === "completed" && styles.completeTasksButton, ]}>
+              <Button title="Completed" color='#fff' onPress={() => setFilter("completed")} />
+            </View>
+          </View>
+        </>
+      )}
+
+
+      <View style={styles.taskContainer}>
         <FlatList
-          data={newAddedTasks}
+          data={filteredTasks}
           renderItem={(itemData) => (
             <TaskItemList
               text={itemData.item.text}
@@ -145,17 +156,57 @@ const styles = StyleSheet.create({
   },
   taskContainer: {
     width: "100%",
-    marginTop: 40,
+    marginTop: 20,
     borderRadius: 12,
     maxHeight: "40%",
   },
   taskContainerHeading: {
     fontSize: 24,
-    marginBottom: 20,
+    marginTop: 20,
     padding: 10,
     textAlign: "center",
     backgroundColor: "#FB923C",
     borderRadius: 12,
+    width:"100%",
+    letterSpacing: 2
+  },
+  listButton: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    width: '100%',
+    marginTop: 2
+  },
+  filterTasksButton: {
+    backgroundColor: 'gray',
+    marginVertical: 10,
+    color: '#fff',
+    borderRadius: 6,
+    padding: 4,
+    width: "32%"
+  },
+  viewAllTasksButton: {
+    backgroundColor: '#0EA5E9',
+    marginVertical: 10,
+    color: '#fff',
+    borderRadius: 6,
+    padding: 4,
+    width: "32%"
+  },
+  pendingTasksButton: {
+    backgroundColor: '#ff110d',
+    marginVertical: 10,
+    color: '#fff',
+    borderRadius: 6,
+    padding: 4,
+    width: "32%"
+  },
+  completeTasksButton: {
+    backgroundColor: '#09ed1c',
+    marginVertical: 10,
+    color: '#fff',
+    borderRadius: 6,
+    padding: 4,
+    width: "32%"
   },
 });
 
