@@ -4,6 +4,7 @@ import { Toast } from "react-native-toast-message/lib/src/Toast";
 import TaskItemList from "../components/TaskItemList";
 import TaskInput from "../components/TaskInput";
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const HomeScreen = () => {
   const [newAddedTasks, setNewAddedTasks] = useState([]);
@@ -13,6 +14,21 @@ const HomeScreen = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
+
+    // Load tasks from AsyncStorage on app start
+    const loadTasks = async () => {
+      try {
+        const storedTasks = await AsyncStorage.getItem('tasks');
+        if (storedTasks) {
+          setNewAddedTasks(JSON.parse(storedTasks)); // Parse the tasks if they exist
+        }
+      } catch (error) {
+        console.error('Error loading tasks from AsyncStorage', error);
+      }
+    };
+
+    loadTasks();
+
     Animated.loop(
       Animated.sequence([
         Animated.parallel([
@@ -27,17 +43,28 @@ const HomeScreen = () => {
     ).start();
   }, []);
 
-  const addTaskHandler = (enteredTaskText) => {
+  // Save tasks to AsyncStorage
+  const saveTasks = async (tasks) => {
+    try {
+      await AsyncStorage.setItem('tasks', JSON.stringify(tasks));
+    } catch (error) {
+      console.error('Error saving tasks to AsyncStorage', error);
+    }
+  };
+
+const addTaskHandler = (enteredTaskText) => {
     if (enteredTaskText.trim() !== "" && enteredTaskText.length >= 3) {
-      setNewAddedTasks((prevTasks) => [
-        ...prevTasks,
-        { 
-          text: enteredTaskText, 
-          id: Math.random().toString(), 
-          completed: false, 
-          createdAt: new Date().toLocaleString(), 
-        },
-      ]);
+      const newTask = {
+        text: enteredTaskText,
+        id: Math.random().toString(),
+        completed: false,
+        createdAt: new Date().toLocaleString(),
+      };
+
+      const updatedTasks = [...newAddedTasks, newTask];
+      setNewAddedTasks(updatedTasks);
+      saveTasks(updatedTasks); // Save updated tasks to AsyncStorage
+
       Toast.show({
         type: "success",
         position: "top",
@@ -52,19 +79,21 @@ const HomeScreen = () => {
         text2: "Please enter a task with at least 3 characters.",
       });
     }
-  }
+  };
 
   const toggleTaskCompletion = (id) => {
-    setNewAddedTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task
-      )
+    const updatedTasks = newAddedTasks.map((task) =>
+      task.id === id ? { ...task, completed: !task.completed } : task
     );
-  }
+    setNewAddedTasks(updatedTasks);
+    saveTasks(updatedTasks); // Save updated tasks to AsyncStorage
+  };
 
   const deleteTaskHandler = (id) => {
-    setNewAddedTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
-  }
+    const updatedTasks = newAddedTasks.filter((task) => task.id !== id);
+    setNewAddedTasks(updatedTasks);
+    saveTasks(updatedTasks); // Save updated tasks to AsyncStorage
+  };
 
   // Filter tasks based on the selected filter type
   const filteredTasks = newAddedTasks.filter((task) => {
