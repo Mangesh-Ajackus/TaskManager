@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { FlatList, StyleSheet, Text, View, Animated,Button, } from "react-native";
+import { FlatList, StyleSheet, Text, View, Animated,Button, Image, TouchableOpacity } from "react-native";
 import { Toast } from "react-native-toast-message/lib/src/Toast";
 import TaskItemList from "../components/TaskItemList";
 import TaskInput from "../components/TaskInput";
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const HomeScreen = () => {
@@ -12,6 +12,18 @@ const HomeScreen = () => {
   const [scaleAnim] = useState(new Animated.Value(0.5));
   const [filter, setFilter] = useState("all"); // New state for filter
   const navigation = useNavigation();
+  const [isDark, setIsDark] = useState(false);
+
+  const toggleTheme = () => setIsDark(prev => !prev);
+
+  const appContainer = {
+    backgroundColor: isDark ? '#000' : '#d5d6f9',
+    flex: 1,
+    paddingTop: 20,
+    paddingHorizontal: 10,
+    justifyContent: "top",
+    alignItems: "center",
+  };
 
   useEffect(() => {
 
@@ -52,7 +64,7 @@ const HomeScreen = () => {
     }
   };
 
-const addTaskHandler = (enteredTaskText) => {
+  const addTaskHandler = (enteredTaskText) => {
     if (enteredTaskText.trim() !== "" && enteredTaskText.length >= 3) {
       const newTask = {
         text: enteredTaskText,
@@ -107,7 +119,39 @@ const addTaskHandler = (enteredTaskText) => {
   });
 
   return (
-    <View style={styles.appContainer}>
+    <View style={appContainer}>
+        {/* <Switch
+          value={isDarkMode}
+          onValueChange={toggleSwitch}
+        /> */}
+        {/* <DarkMode /> */}
+
+        <TouchableOpacity
+      style={[
+        styles.toggleContainer,
+        { backgroundColor: isDark ? '#f5f6fa' : '#f5f6fa' },
+      ]}
+      onPress={toggleTheme}
+    >
+      <Animated.View
+        style={[
+          styles.knob,
+          {
+            alignSelf: isDark ? 'flex-end' : 'flex-start',
+            backgroundColor: isDark ? '#29accc' : '#fbc531',
+          },
+        ]}
+      >
+        <Image
+          source={
+            isDark
+              ? require('../assets/night.png') // Your moon icon
+              : require('../assets/day.png')  // Your sun icon
+          }
+          style={styles.icon}
+        />
+      </Animated.View>
+    </TouchableOpacity>
       <Animated.Text
         style={[
           styles.appHeading,
@@ -176,12 +220,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   appContainer: {
-    flex: 1,
-    paddingTop: 20,
-    paddingHorizontal: 10,
-    justifyContent: "top",
-    alignItems: "center",
-    backgroundColor: "#d5d6f9"
+    
   },
   taskContainer: {
     width: "100%",
@@ -236,6 +275,33 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     padding: 4,
     width: "32%"
+  },
+
+  //toggle styling
+  toggleContainer: {
+    width: 60,
+    height: 32,
+    borderRadius: 20,
+    padding: 0,
+    justifyContent: 'center',
+  },
+  knob: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    // Optional shadow
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 3,
+  },
+  icon: {
+    width: 20,
+    height: 20,
+    resizeMode: 'contain',
   },
 });
 
