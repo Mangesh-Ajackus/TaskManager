@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
-import { FlatList, StyleSheet, Text, View, Animated,Button, Image, TouchableOpacity } from "react-native";
+import { FlatList, StyleSheet, Text, View, Animated, Image, TouchableOpacity } from "react-native";
 import { Toast } from "react-native-toast-message/lib/src/Toast";
 import TaskItemList from "../components/TaskItemList";
 import TaskInput from "../components/TaskInput";
-import {useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const HomeScreen = () => {
   const [newAddedTasks, setNewAddedTasks] = useState([]);
   const [fadeAnim] = useState(new Animated.Value(0));
   const [scaleAnim] = useState(new Animated.Value(0.5));
-  const [filter, setFilter] = useState("all"); // New state for filter
+  const [filter, setFilter] = useState("all");
   const navigation = useNavigation();
   const [isDark, setIsDark] = useState(false);
 
@@ -21,18 +21,16 @@ const HomeScreen = () => {
     flex: 1,
     paddingTop: 20,
     paddingHorizontal: 10,
-    justifyContent: "top",
+    justifyContent: "flex-start",
     alignItems: "center",
   };
 
   useEffect(() => {
-
-    // Load tasks from AsyncStorage on app start
     const loadTasks = async () => {
       try {
         const storedTasks = await AsyncStorage.getItem('tasks');
         if (storedTasks) {
-          setNewAddedTasks(JSON.parse(storedTasks)); // Parse the tasks if they exist
+          setNewAddedTasks(JSON.parse(storedTasks));
         }
       } catch (error) {
         console.error('Error loading tasks from AsyncStorage', error);
@@ -55,7 +53,6 @@ const HomeScreen = () => {
     ).start();
   }, []);
 
-  // Save tasks to AsyncStorage
   const saveTasks = async (tasks) => {
     try {
       await AsyncStorage.setItem('tasks', JSON.stringify(tasks));
@@ -75,7 +72,7 @@ const HomeScreen = () => {
 
       const updatedTasks = [...newAddedTasks, newTask];
       setNewAddedTasks(updatedTasks);
-      saveTasks(updatedTasks); // Save updated tasks to AsyncStorage
+      saveTasks(updatedTasks);
 
       Toast.show({
         type: "success",
@@ -98,60 +95,50 @@ const HomeScreen = () => {
       task.id === id ? { ...task, completed: !task.completed } : task
     );
     setNewAddedTasks(updatedTasks);
-    saveTasks(updatedTasks); // Save updated tasks to AsyncStorage
+    saveTasks(updatedTasks);
   };
 
   const deleteTaskHandler = (id) => {
     const updatedTasks = newAddedTasks.filter((task) => task.id !== id);
     setNewAddedTasks(updatedTasks);
-    saveTasks(updatedTasks); // Save updated tasks to AsyncStorage
+    saveTasks(updatedTasks);
   };
 
-  // Filter tasks based on the selected filter type
   const filteredTasks = newAddedTasks.filter((task) => {
-    if (filter === "pending") {
-      return !task.completed;
-    }
-    if (filter === "completed") {
-      return task.completed;
-    }
-    return true; // Return all tasks when filter is 'all'
+    if (filter === "pending") return !task.completed;
+    if (filter === "completed") return task.completed;
+    return true;
   });
 
   return (
     <View style={appContainer}>
-        {/* <Switch
-          value={isDarkMode}
-          onValueChange={toggleSwitch}
-        /> */}
-        {/* <DarkMode /> */}
-
-        <TouchableOpacity
-      style={[
-        styles.toggleContainer,
-        { backgroundColor: isDark ? '#f5f6fa' : '#f5f6fa' },
-      ]}
-      onPress={toggleTheme}
-    >
-      <Animated.View
+      <TouchableOpacity
         style={[
-          styles.knob,
-          {
-            alignSelf: isDark ? 'flex-end' : 'flex-start',
-            backgroundColor: isDark ? '#29accc' : '#fbc531',
-          },
+          styles.toggleContainer,
+          { backgroundColor: isDark ? '#f5f6fa' : '#f5f6fa' },
         ]}
+        onPress={toggleTheme}
       >
-        <Image
-          source={
-            isDark
-              ? require('../assets/night.png') // Your moon icon
-              : require('../assets/day.png')  // Your sun icon
-          }
-          style={styles.icon}
-        />
-      </Animated.View>
-    </TouchableOpacity>
+        <Animated.View
+          style={[
+            styles.knob,
+            {
+              alignSelf: isDark ? 'flex-end' : 'flex-start',
+              backgroundColor: isDark ? '#29accc' : '#fbc531',
+            },
+          ]}
+        >
+          <Image
+            source={
+              isDark
+                ? require('../assets/night.png')
+                : require('../assets/day.png')
+            }
+            style={styles.icon}
+          />
+        </Animated.View>
+      </TouchableOpacity>
+
       <Animated.Text
         style={[
           styles.appHeading,
@@ -167,22 +154,38 @@ const HomeScreen = () => {
         <>
           <Text style={styles.taskContainerHeading}>List of Tasks</Text>
           <View style={styles.listButton}>
-            <View style={[styles.filterTasksButton, filter === "all" && styles.viewAllTasksButton,]}>
-              <Button title="View All" color='#fff' onPress={() => setFilter("all")} />
-            </View>
+            <TouchableOpacity
+              style={[
+                styles.filterTasksButton,
+                filter === "all" && styles.viewAllTasksButton,
+              ]}
+              onPress={() => setFilter("all")}
+            >
+              <Text style={styles.filterButtonText}>View All</Text>
+            </TouchableOpacity>
 
-            <View style={
-              [styles.filterTasksButton, filter === "pending" && styles.pendingTasksButton, ]}>
-              <Button title="Pending" color='#fff' onPress={() => setFilter("pending")} />
-            </View>
+            <TouchableOpacity
+              style={[
+                styles.filterTasksButton,
+                filter === "pending" && styles.pendingTasksButton,
+              ]}
+              onPress={() => setFilter("pending")}
+            >
+              <Text style={styles.filterButtonText}>Pending</Text>
+            </TouchableOpacity>
 
-            <View style={[styles.filterTasksButton, filter === "completed" && styles.completeTasksButton, ]}>
-              <Button title="Completed" color='#fff' onPress={() => setFilter("completed")} />
-            </View>
+            <TouchableOpacity
+              style={[
+                styles.filterTasksButton,
+                filter === "completed" && styles.completeTasksButton,
+              ]}
+              onPress={() => setFilter("completed")}
+            >
+              <Text style={styles.filterButtonText}>Completed</Text>
+            </TouchableOpacity>
           </View>
         </>
       )}
-
 
       <View style={styles.taskContainer}>
         <FlatList
@@ -213,20 +216,17 @@ const styles = StyleSheet.create({
     color: "#5B21B6",
     marginBottom: 0,
     fontWeight: "700",
-    shadowColor: "red",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.5,
     shadowRadius: 3,
     elevation: 5,
   },
-  appContainer: {
-    
-  },
   taskContainer: {
+    flex: 1,
     width: "100%",
     marginTop: 20,
     borderRadius: 12,
-    maxHeight: "40%",
   },
   taskContainerHeading: {
     fontSize: 24,
@@ -235,54 +235,45 @@ const styles = StyleSheet.create({
     textAlign: "center",
     backgroundColor: "#FB923C",
     borderRadius: 12,
-    width:"100%",
-    letterSpacing: 2
+    width: "100%",
+    letterSpacing: 2,
+    color: "#fff",
+    fontWeight: "600",
   },
   listButton: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     width: '100%',
-    marginTop: 2
+    marginTop: 2,
   },
   filterTasksButton: {
     backgroundColor: 'gray',
     marginVertical: 10,
-    color: '#fff',
     borderRadius: 6,
-    padding: 4,
-    width: "32%"
+    paddingVertical: 10,
+    paddingHorizontal: 8,
+    width: "32%",
+    alignItems: 'center',
   },
   viewAllTasksButton: {
     backgroundColor: '#0EA5E9',
-    marginVertical: 10,
-    color: '#fff',
-    borderRadius: 6,
-    padding: 4,
-    width: "32%"
   },
   pendingTasksButton: {
     backgroundColor: '#ff110d',
-    marginVertical: 10,
-    color: '#fff',
-    borderRadius: 6,
-    padding: 4,
-    width: "32%"
   },
   completeTasksButton: {
     backgroundColor: '#09ed1c',
-    marginVertical: 10,
+  },
+  filterButtonText: {
     color: '#fff',
-    borderRadius: 6,
-    padding: 4,
-    width: "32%"
+    fontSize: 16,
+    fontWeight: '600',
   },
 
-  //toggle styling
   toggleContainer: {
     width: 60,
     height: 32,
     borderRadius: 20,
-    padding: 0,
     justifyContent: 'center',
   },
   knob: {
@@ -291,7 +282,6 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
-    // Optional shadow
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,

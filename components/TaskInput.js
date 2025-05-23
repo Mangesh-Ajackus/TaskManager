@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { StyleSheet, TextInput, View, Button, Image, PanResponder, Animated } from "react-native";
+import { StyleSheet,Text, TextInput, View, Image, PanResponder, Animated, TouchableOpacity } from "react-native";
 
 const TaskInput = (props) => {
     const [enteredTaskText, setEnteredTaskText] = useState("");
@@ -48,9 +48,12 @@ const TaskInput = (props) => {
             onChangeText={taskInputHandler}
             value={enteredTaskText} // Binding the value here to update the input
           />
-          <View style={styles.addTaskButton}>
+          {/* <View style={styles.addTaskButton}>
             <Button title="Add Task" onPress={addTaskHandler} color='#fff'/>
-          </View>
+          </View> */}
+          <TouchableOpacity style={styles.addTaskButton} onPress={addTaskHandler}>
+            <Text style={styles.buttonText}>Add Task</Text>
+          </TouchableOpacity>
       </View>
     );
 
@@ -78,12 +81,17 @@ const styles = StyleSheet.create({
         backgroundColor: '#E5E7EB',
         borderRadius: 8,
     },
-    addTaskButton:{
+    addTaskButton: {
       backgroundColor: '#0EA5E9',
       marginVertical: 10,
-      color: '#fff',
       borderRadius: 6,
-      padding: 4,
+      paddingVertical: 12,
       paddingHorizontal: 20,
+      alignItems: 'center',
     },
+    buttonText: {
+      color: '#fff',
+      fontSize: 16,
+      fontWeight: '600',
+    }    
 })
