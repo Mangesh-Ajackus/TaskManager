@@ -1,22 +1,24 @@
 {
   "expo": {
-    "name": "SecondApp",
+    "name": "Task Manager",
     "slug": "SecondApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/tk-icon.png",
     "userInterfaceStyle": "light",
     "backgroundColor": "#e7b0f5",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/tk-splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#de6899"
     },
     "ios": {
+      "buildNumber" : "1.0.0",
       "supportsTablet": true
     },
     "android": {
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#3dba46"
